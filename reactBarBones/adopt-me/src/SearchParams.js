@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 import Pet from "./pet";
+import useBreedList from "./useBreedList";
+
 const ANIMALS = ["dog", "bird", "cat"];
 const SearchPrams = () => {
   const [location, setLocation] = useState("");
   const [animal, setAnimal] = useState("");
   const [breed, setBreed] = useState("");
   const [pets, setPets] = useState([]);
-  const breeds = [];
+  const [breeds] = useBreedList(animal);
 
   //   const locationTuple = useState("fsga");
   //   const location = locationTuple[0];
@@ -22,6 +24,10 @@ const SearchPrams = () => {
     const json = await res.json();
     console.log(json);
     setPets(json.pets);
+  }
+  function onAnimalChange(e) {
+    setAnimal(e.target.value);
+    console.log(e.target.value);
   }
 
   return (
@@ -40,7 +46,7 @@ const SearchPrams = () => {
           <select
             id="animal"
             value={animal}
-            onChange={(e) => setAnimal(e.target.value)}
+            onChange={onAnimalChange}
             onBlur={(e) => setAnimal(e.target.value)}
           >
             <option />
