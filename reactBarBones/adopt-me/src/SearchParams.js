@@ -32,7 +32,12 @@ const SearchPrams = () => {
 
   return (
     <div className="search-params">
-      <form>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          callPets();
+        }}
+      >
         <label htmlFor="location">
           Location
           <input
@@ -46,7 +51,7 @@ const SearchPrams = () => {
           <select
             id="animal"
             value={animal}
-            onChange={onAnimalChange}
+            onChange={(e) => setAnimal(e.target.value)}
             onBlur={(e) => setAnimal(e.target.value)}
           >
             <option />
