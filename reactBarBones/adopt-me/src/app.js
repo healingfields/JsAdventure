@@ -1,8 +1,9 @@
-import React, { StrictMode } from "react";
+import React, { StrictMode, useState } from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
 import Details from "./Details";
 import SearchPrams from "./SearchParams";
+import ThemeContext from "./ThemeContext";
 
 // const App = () => {
 //   return React.createElement("div", {}, [
@@ -15,24 +16,27 @@ import SearchPrams from "./SearchParams";
 // };
 
 const App = () => {
+  const [theme, setTheme] = useState("dark");
   return (
-    <div>
-      <Router>
-        <header>
-          <Link to="/">
-            <h1>Adopt me</h1>
-          </Link>
-        </header>
-        <Switch>
-          <Route path="/details/:id">
-            <Details />
-          </Route>
-          <Route path="/">
-            <SearchPrams />
-          </Route>
-        </Switch>
-      </Router>
-    </div>
+    <ThemeContext.Provider value={theme}>
+      <div>
+        <Router>
+          <header>
+            <Link to="/">
+              <h1>Adopt me</h1>
+            </Link>
+          </header>
+          <Switch>
+            <Route path="/details/:id">
+              <Details />
+            </Route>
+            <Route path="/">
+              <SearchPrams />
+            </Route>
+          </Switch>
+        </Router>
+      </div>
+    </ThemeContext.Provider>
   );
 };
 
