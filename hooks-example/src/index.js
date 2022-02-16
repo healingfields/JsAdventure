@@ -2,7 +2,9 @@ import React from "react";
 import ReactDOM from "react-dom";
 import Callback from "./Callback";
 import ContextComponent from "./Context";
+import DebugValueComponent from "./DebugValue";
 import EffectComponent from "./Effect";
+import ImperativeHandleComponent from "./ImperativeHandle";
 import LayoutEffectComponent from "./LayoutEffect";
 import MemoComponent from "./Memo";
 import ReducerComponent from "./Reducer";
@@ -27,6 +29,10 @@ function App() {
       <Callback></Callback>
       <hr />
       <LayoutEffectComponent></LayoutEffectComponent>
+      <hr />
+      <ImperativeHandleComponent></ImperativeHandleComponent>
+      <hr />
+      <DebugValueComponent></DebugValueComponent>
     </div>
   );
 }
