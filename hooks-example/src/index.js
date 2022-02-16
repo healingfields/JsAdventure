@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import ContextComponent from "./Context";
 import EffectComponent from "./Effect";
+import MemoComponent from "./Memo";
 import ReducerComponent from "./Reducer";
 import RefComponent from "./Ref";
 import StateComponent from "./State";
@@ -18,6 +19,8 @@ function App() {
       <RefComponent></RefComponent>
       <hr />
       <ReducerComponent></ReducerComponent>
+      <hr />
+      <MemoComponent></MemoComponent>
     </div>
   );
 }
