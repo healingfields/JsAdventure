@@ -1,7 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import Callback from "./Callback";
 import ContextComponent from "./Context";
 import EffectComponent from "./Effect";
+import LayoutEffectComponent from "./LayoutEffect";
 import MemoComponent from "./Memo";
 import ReducerComponent from "./Reducer";
 import RefComponent from "./Ref";
@@ -21,6 +23,10 @@ function App() {
       <ReducerComponent></ReducerComponent>
       <hr />
       <MemoComponent></MemoComponent>
+      <hr />
+      <Callback></Callback>
+      <hr />
+      <LayoutEffectComponent></LayoutEffectComponent>
     </div>
   );
 }
@@ -31,7 +37,3 @@ ReactDOM.render(
   </React.StrictMode>,
   document.getElementById("root")
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
