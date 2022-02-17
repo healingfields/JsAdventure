@@ -30,24 +30,34 @@ const SearchPrams = () => {
   }
 
   return (
-    <div className="search-params">
+    <div className="mx-auto my-0">
       <form
+        className="rounded-lg bg-gray-300 shadow-lg  w-9/12 m-auto flex flex-col items-center justify-center my-10 "
         onSubmit={(e) => {
           e.preventDefault();
           callPets();
         }}
       >
-        <label htmlFor="location">
+        <label
+          htmlFor="location"
+          className="flex flex-col items-center justify-center "
+        >
           Location
           <input
             id="location"
             placeholder="location"
             value={location}
             onChange={(e) => setLocation(e.target.value)}
+            className="w-72 p-1 rounded m-1 "
           ></input>
         </label>
-        <label htmlFor="animal">
+        <label
+          htmlFor="animal"
+          className="flex flex-col items-center justify-center "
+        >
+          Animal
           <select
+            className="w-72 p-1 rounded m-1 "
             id="animal"
             value={animal}
             onChange={(e) => setAnimal(e.target.value)}
@@ -61,14 +71,18 @@ const SearchPrams = () => {
             ))}
           </select>
         </label>
-        <label htmlFor="breed">
+        <label
+          htmlFor="breed"
+          className="flex flex-col items-center justify-center "
+        >
+          Breed
           <select
+            className="w-72 p-1 rounded m-1 disabled:opacity-75"
             id="breed"
             value={breed}
             onChange={(e) => setBreed(e.target.value)}
             onBlur={(e) => setBreed(e.target.value)}
           >
-            <option />
             {breeds.map((breed) => (
               <option value={breed} key={breed}>
                 {breed}
@@ -76,9 +90,13 @@ const SearchPrams = () => {
             ))}
           </select>
         </label>
-        <label htmlFor="theme">
+        <label
+          htmlFor="theme"
+          className="flex flex-col items-center justify-center "
+        >
           Theme
           <select
+            className="w-72 p-1 rounded m-1 "
             value={theme}
             onChange={(e) => setTheme(e.target.value)}
             onBlur={(e) => setTheme(e.target.value)}
@@ -90,7 +108,12 @@ const SearchPrams = () => {
             <option value="mediumorchid">medium orchid</option>
           </select>
         </label>
-        <button style={{ backgroundColor: theme }}>submit</button>
+        <button
+          style={{ backgroundColor: theme }}
+          className="w-40 p-1 rounded m-1 my-6 text-white hover:opacity-50 border-none"
+        >
+          submit
+        </button>
       </form>
       <Results pets={pets} />
     </div>

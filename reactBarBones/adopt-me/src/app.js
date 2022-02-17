@@ -19,11 +19,19 @@ const App = () => {
   const theme = useState("darkblue");
   return (
     <ThemeContext.Provider value={theme}>
-      <div>
+      <div
+        className="p-0 m-0"
+        style={{
+          background:
+            "url(https://pets-images.dev-apis.com/pets/wallpaperC.jpg) ",
+        }}
+      >
         <Router>
-          <header>
+          <header className="w-full text-center bg-gradient-to-b from-purple-500 to-blue-500 p-6 mb-9">
             <Link to="/">
-              <h1>Adopt me</h1>
+              <h1 className="text-3xl text-white font-sans hover:text-gray-400">
+                Adopt me!
+              </h1>
             </Link>
           </header>
           <Switch>
