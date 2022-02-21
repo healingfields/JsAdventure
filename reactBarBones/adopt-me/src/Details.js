@@ -37,11 +37,11 @@ class Details extends Component {
     } = this.state;
 
     return (
-      <div className="details">
+      <div className="">
         <Carousel images={images} />
-        <div>
-          <h1>{name}</h1>
-          <h2>
+        <div className="w-5/6 text-center my-8 rounded mx-auto p-4 bg-pink-400">
+          <h1 className="text-xl ">{name}</h1>
+          <h2 className="text-lg mb-2">
             {animal} - {breed} - {city} - {state}{" "}
           </h2>
           <ThemeContext.Consumer>
@@ -49,6 +49,7 @@ class Details extends Component {
               <button
                 onClick={this.toggleModal}
                 style={{ backgroundColor: theme }}
+                className="p-2 rounded mb-4"
               >
                 {" "}
                 Adopt me
