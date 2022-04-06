@@ -1,0 +1,49 @@
+*{
+    box-sizing: border-box;
+}
+
+body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+    margin: 0;
+    border: red solid 1px;
+} 
+
+.container{
+    border: black 2px solid;
+    display: flex;
+    width: 90vw;
+}
+
+.card{
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 80vh;
+    border-radius: 50px;
+    margin:10px;
+    cursor: pointer;
+    color:crimson;   
+    flex: 0.5;
+    position: relative;
+}
+
+.card h4{
+    position:absolute;
+    bottom: 20px;
+    left: 20px;
+    font-size: 10px;
+    margin: 0;
+    opacity: 0;
+}
+
+.card.active{
+    flex:4
+}
+
+.card.active h4{
+    opacity: 1;
+}
