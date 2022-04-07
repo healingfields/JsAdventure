@@ -29,6 +29,7 @@ body{
     color:crimson;   
     flex: 0.5;
     position: relative;
+    transition: all 0.4s ease-in ;
 }
 
 .card h4{
@@ -46,4 +47,5 @@ body{
 
 .card.active h4{
     opacity: 1;
+    transition: opacity 0.7s ease-in 0.4s;
 }
