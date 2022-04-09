@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@100&display=swap');
 *{
     box-sizing: border-box;
     margin: 0;
@@ -6,6 +7,7 @@
 
 body{
     height: 100vh;
+    font-family: 'Barlow Condensed', sans-serif;
 }
 
 .slider-container{
@@ -21,7 +23,7 @@ body{
     top: 0;
     height: 100%;
     width: 35%;
-    transition: transform 0.5s ease-in-out;
+    transition: transform 0.4s ease-in-out;
 }
 
 .left-side > div{
@@ -34,8 +36,16 @@ body{
 }
 
 .left-side h2{
-    font-size: 35px;
+    font-size: 6vh;
+    padding-bottom: 20px;
 }
+.left-side p{
+    font-size: 2.5vh;
+
+}
+
+
+
 
 .right-side{
     height: 100%;
@@ -80,9 +90,11 @@ button:focus {
 }
 .slider-container .actions-buttons .down-button{
     transform: translateY(-100%);
-    border-top-left-radius: 5px;
-  border-bottom-left-radius: 5px;
+    border-top-left-radius: 20%;
+    border-bottom-right-radius: 20%;
 }
 .slider-container .actions-buttons .up-button{
     transform: translateX(-100%);
+    border-top-right-radius: 20%;
+    border-bottom-left-radius: 20%;
 }
