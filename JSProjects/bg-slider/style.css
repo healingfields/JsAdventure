@@ -11,6 +11,7 @@ body{
   background-position: center;
   background-size: cover;
   height: 100vh;
+  transition: 0.4s;
 }
 
 body::before{
@@ -18,7 +19,6 @@ body::before{
   content: '';
   width: 100%;
   height: 100vh;
-  background-color: antiquewhite;
   position: absolute;
   top: 0;
   left: 0;
@@ -28,7 +28,7 @@ body::before{
 .slider-container{
   width: 70vw;
   height: 70vh;
-  border: 2px solid black;
+  box-shadow: 5px 5px 35px rgba(0, 0, 0, 3);
   position: relative;
   overflow: hidden;
 }
@@ -41,6 +41,7 @@ body::before{
   position: absolute;
   top: -15vh;
   left: -15vw;
+  transition: 0.8s ease;
 }
 .slide.active{
   opacity: 1;
