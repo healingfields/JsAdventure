@@ -26,6 +26,22 @@ const list = [{
   objectID:1
 }]
 const App = () => {
+  const stories = [
+    {title:'React',
+    url:'https://reactjs.org',
+    author:'jordan',
+    points:5,
+    nbr_comments:20,
+    objectID:0
+  },
+    {title:'Vue ',
+    url:'https://Vuejs.org',
+    author:'martin',
+    points:4,
+    nbr_comments:10,
+    objectID:1
+  }
+  ]
   const handleChange = event => {
     console.log(event.target.value);
   }
@@ -35,14 +51,14 @@ const App = () => {
       <label htmlFor='search'>Search :</label>
       <input type="text" id="search" onChange={handleChange}/>
       <hr/>
-       <List/>
+       <List list={stories}/>
     </div>
   );
 }
 
 
-const List = () =>
-    list.map( l => {
+const List = (props) =>
+    props.list.map( l => {
           return (
           <div key={l.objectID}>
             <span>
