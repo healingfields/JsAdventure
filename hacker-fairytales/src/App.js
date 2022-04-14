@@ -26,6 +26,8 @@ const list = [{
   objectID:1
 }]
 const App = () => {
+
+  const [searchTerm, setSearchTerm] = React.useState('')
   const stories = [
     {title:'React',
     url:'https://reactjs.org',
@@ -43,13 +45,14 @@ const App = () => {
   }
   ]
   const handleChange = event => {
-    console.log(event.target.value);
+    setSearchTerm(event.target.value)
   }
   return(
     <div>
       <h1>My hacker fairytales</h1>
       <label htmlFor='search'>Search :</label>
       <input type="text" id="search" onChange={handleChange}/>
+      <p>Currently Searching for <strong>{searchTerm}</strong></p>
       <hr/>
        <List list={stories}/>
     </div>
