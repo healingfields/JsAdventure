@@ -1,3 +1,4 @@
+import _ from 'lodash'
 import React from 'react'
 import { isTemplateExpression } from 'typescript'
 
@@ -24,20 +25,24 @@ const list = [{
   points:3,
   objectID:1
 }]
-function App(){
+const App = () => {
+  const handleChange = event => {
+    console.log(event.target.value);
+  }
   return(
     <div>
       <h1>My hacker fairytales</h1>
       <label htmlFor='search'>Search :</label>
-      <input type="text" id="search"/>
+      <input type="text" id="search" onChange={handleChange}/>
       <hr/>
        <List/>
     </div>
   );
 }
 
-function List(){
-  return  list.map((l)=>{
+
+const List = () =>
+    list.map( l => {
           return (
           <div key={l.objectID}>
             <span>
@@ -49,7 +54,7 @@ function List(){
             <span>{l.points}</span>
           </div>
            )
-        })}
+        })
 
 
 export default App;
