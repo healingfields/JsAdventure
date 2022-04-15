@@ -1,4 +1,4 @@
-import _ from 'lodash'
+import _, { set } from 'lodash'
 import React from 'react'
 import { isTemplateExpression } from 'typescript'
 
@@ -25,14 +25,24 @@ const list = [{
   points:3,
   objectID:1
 }]
-const App = () => {
 
-  const [searchTerm, setSearchTerm] = React.useState(localStorage.getItem('search') || 'React')
+const useSemiPersistentHook = (key, initialState) => {
+  const [value, setValue] = React.useState(localStorage.getItem(key)||initialState)
 
   React.useEffect(()=>{
-    console.log('happened');
-  localStorage.setItem('search', searchTerm)
-  },[searchTerm])
+    localStorage.setItem(key, value)
+  },[value, key])
+
+  return [value, setValue]
+};
+const App = () => {
+
+  const [searchTerm, setSearchTerm] = useSemiPersistentHook('search', 'react')
+
+  // React.useEffect(()=>{
+  //   console.log('happened');
+  // localStorage.setItem('search', searchTerm)
+  // },[searchTerm])
 
   const handleSearch = (event) =>{
     setSearchTerm(event.target.value);
@@ -78,11 +88,11 @@ const Search = ({search, onSearch}) => {
   // }
   // const {search, onSearch} = props;
   return(
-    <div>
+    <>
       <label htmlFor='search'>Search :</label>
       <input type="text" id="search" onChange={onSearch} value={search}/>
       <p>Currently Searching for <strong>{search}</strong></p>
-    </div>
+    </>
   );
 }
 
