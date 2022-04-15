@@ -106,24 +106,38 @@ const App = () => {
   return(
     <div>
       <h1>My hacker fairytales</h1>
-      <InputWithLabel onInputChange={handleSearch} value={searchTerm} id='search' label='Search :' type='text'/>
+      <InputWithLabel onInputChange={handleSearch} value={searchTerm} id='search'  type='text' isFocused={false}>
+       <strong>Search :</strong> 
+      </InputWithLabel>
+       <InputWithLabel onInputChange={handleSearch} value={searchTerm} id='search2'  type='text' isFocused>
+       <strong>Search2 :</strong> 
+      </InputWithLabel>
       <hr/>
        <List list={searchedStories} />
     </div>
   );
 }
 
-const InputWithLabel = ({id, label, type, value, onInputChange}) => {
+const InputWithLabel = ({id, type, value, onInputChange, isFocused, children}) => {
   // const [searchTerm, setSearchTerm] = React.useState('')
   // const handleChange = event => {
   //   setSearchTerm(event.target.value)
   //   props.onSearch(event)
   // }
   // const {search, onSearch} = props;
+
+  const inputRef = React.useRef();
+
+  React.useEffect(()=>{
+    if(isFocused && inputRef.current){
+      inputRef.current.focus()
+    }
+  },[isFocused])
+
   return(
     <>
-      <label htmlFor={id}>{label} :</label>
-      <input type={type} id={id} onChange={onInputChange} value={value}/>
+      <label htmlFor={id}>{children} :</label>
+      <input type={type} id={id} onChange={onInputChange} value={value} ref={inputRef} />
       <p>Currently Searching for <strong>{value}</strong></p>
     </>
   );
