@@ -46,6 +46,7 @@ const App = () => {
 
   const handleSearch = (event) =>{
     setSearchTerm(event.target.value);
+      console.log(searchedStories);
   }
 
   const stories = [
@@ -62,25 +63,57 @@ const App = () => {
     points:4,
     nbr_comments:10,
     objectID:1
-  }
-
+  },
+  {
+    title:'Angular',
+    url:'https://angular.org',
+    author:'omar',
+    points:5,
+    nbr_comments:50,
+    objectID:2
+  },
+  { 
+    title:'Gatsby ',
+    url:'https://gatsby.org',
+    author:'fernando',
+    points:3,
+    nbr_comments:10,
+    objectID:3
+  },
+  { 
+    title:'Laravel',
+    url:'https://laravel.org',
+    author:'joe',
+    points:3,
+    nbr_comments:31,
+    objectID:4
+  },
+  {
+    title:'Vim ',
+    url:'https://vim.org',
+    author:'martin',
+    points:5,
+    nbr_comments:45,
+    objectID:5
+  },
   ]
   const searchedStories = stories.filter(story=>{
     return story.title
             .toLowerCase()
             .includes(searchTerm.toLowerCase())
   })
+
   return(
     <div>
       <h1>My hacker fairytales</h1>
-      <Search onSearch={handleSearch} search={searchTerm} />
+      <InputWithLabel onInputChange={handleSearch} value={searchTerm} id='search' label='Search :' type='text'/>
       <hr/>
        <List list={searchedStories} />
     </div>
   );
 }
 
-const Search = ({search, onSearch}) => {
+const InputWithLabel = ({id, label, type, value, onInputChange}) => {
   // const [searchTerm, setSearchTerm] = React.useState('')
   // const handleChange = event => {
   //   setSearchTerm(event.target.value)
@@ -89,9 +122,9 @@ const Search = ({search, onSearch}) => {
   // const {search, onSearch} = props;
   return(
     <>
-      <label htmlFor='search'>Search :</label>
-      <input type="text" id="search" onChange={onSearch} value={search}/>
-      <p>Currently Searching for <strong>{search}</strong></p>
+      <label htmlFor={id}>{label} :</label>
+      <input type={type} id={id} onChange={onInputChange} value={value}/>
+      <p>Currently Searching for <strong>{value}</strong></p>
     </>
   );
 }
