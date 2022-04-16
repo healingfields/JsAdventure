@@ -1,30 +1,44 @@
+import { type } from '@testing-library/user-event/dist/type'
 import _, { set } from 'lodash'
 import React from 'react'
 import { isTemplateExpression } from 'typescript'
 
-const title = "idriss"
-const welcome = {
-  greeting : 'Hey',
-  title : 'idriss',
+// const title = "idriss"
+// const welcome = {
+//   greeting : 'Hey',
+//   title : 'idriss',
+// }
+// function getTitle(title){
+//   return title
+// }
+// const nbr = 5
+// const list = [{
+//   title:'react',
+//   url:'https://reactjs.org/',
+//   author:'jordan',
+//   points:4,
+//   objectID:0
+// },
+// {
+//   title:'angular',
+//   url:'https://angular.org/',
+//   author:'cobe',
+//   points:3,
+//   objectID:1
+// }]
+
+const storiesReducer = (state, action) => {
+  switch(action.type){
+    case 'SET_STORIES':
+      return action.payload;
+    case 'REMOVE_STORY':
+      return state.filter(
+        story => story.objectID !== action.payload.objectID
+      );
+    default:
+      throw new Error();
+  }
 }
-function getTitle(title){
-  return title
-}
-const nbr = 5
-const list = [{
-  title:'react',
-  url:'https://reactjs.org/',
-  author:'jordan',
-  points:4,
-  objectID:0
-},
-{
-  title:'angular',
-  url:'https://angular.org/',
-  author:'cobe',
-  points:3,
-  objectID:1
-}]
 
 const useSemiPersistentHook = (key, initialState) => {
   const [value, setValue] = React.useState(localStorage.getItem(key)||initialState)
@@ -87,9 +101,10 @@ const App = () => {
   ]
 
   const [searchTerm, setSearchTerm] = useSemiPersistentHook('search', 'react')
-  const [stories, setStories] = React.useState([]);
+  // const [stories, setStories] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(false);
   const [isError, setIsError] = React.useState(false)
+  const [stories, dispactchStories] = React.useReducer(storiesReducer, []);
 
   const getAsyncStories = () =>
     new Promise(resolve => 
@@ -103,7 +118,11 @@ const App = () => {
   React.useEffect(()=>{
     setIsLoading(true)
     getAsyncStories().then(result => {
-      setStories(result.data.stories);
+      // setStories(result.data.stories);
+      dispactchStories({
+        type: 'SET_STORIES',
+        payload: result.data.stories,
+      })
       setIsLoading(false)
     }).catch(()=>setIsError(true));
   }, []);
@@ -114,10 +133,10 @@ const App = () => {
   }
 
   const handleRemoveStory = item => {
-    const newStories = stories.filter(
-      story => story.objectID !== item.objectID
-    );
-    setStories(newStories);
+    dispactchStories({
+      type: 'REMOVE_STORY',
+      payload: item,
+    })
   }
 
   const searchedStories = stories.filter(story=>{
