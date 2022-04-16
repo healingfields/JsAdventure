@@ -88,12 +88,22 @@ const App = () => {
 
   const [searchTerm, setSearchTerm] = useSemiPersistentHook('search', 'react')
 
-  const [stories, setStories] = React.useState(initialStories);
+  const [stories, setStories] = React.useState([]);
 
-  // React.useEffect(()=>{
-  //   console.log('happened');
-  // localStorage.setItem('search', searchTerm)
-  // },[searchTerm])
+  const getAsyncStories = () =>
+    new Promise(resolve => 
+      setTimeout(
+        () => resolve({data: {stories : initialStories}}),
+        2000
+      )
+    )
+
+
+  React.useEffect(()=>{
+    getAsyncStories().then(result => {
+      setStories(result.data.stories);
+    });
+  }, []);
 
   const handleSearch = (event) =>{
     setSearchTerm(event.target.value);
