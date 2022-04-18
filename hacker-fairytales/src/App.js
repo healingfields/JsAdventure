@@ -1,4 +1,5 @@
 import React from 'react'
+import axios from 'axios';
 
 const storiesReducer = (state, action) => {
   switch(action.type){
@@ -66,19 +67,20 @@ const App = () => {
       type: 'STORIES_LOADING'
     });
 
-    fetch(url)
-      .then(response => response.json())
-      .then(result => {
+    axios
+      .get(url)
+      .then(result=>{
         dispactchStories({
           type:'STORIES_LOADED',
-          payload:result.hits,
-        });
+          payload:result.data.hits,
+        })
       })
-      .catch(()=>
-        dispactchStories({
-          type:'STORIES_FETCH_FAILURE'
-        }));
-  },[url])
+      .catch(()=>{
+          dispactchStories({
+          type:'STORIES_FETCH_FAILURE',
+        })
+      })
+  }, [url])
 
   React.useEffect(()=>{
     // setIsLoading(true)
