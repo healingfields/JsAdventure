@@ -56,16 +56,13 @@ const App = () => {
   //       2000
   //     )
   //   )
-
-
-  React.useEffect(()=>{
-    // setIsLoading(true)
+  const handleFetchStories = React.useCallback(()=>{
     if(!searchTerm) return;
 
     dispactchStories({
       type: 'STORIES_LOADING'
     });
-    
+
     fetch(`${API_ENDPOINT}${searchTerm}`)
       .then(response => response.json())
       .then(result => {
@@ -77,8 +74,13 @@ const App = () => {
       .catch(()=>
         dispactchStories({
           type:'STORIES_FETCH_FAILURE'
-        }));}
- , [searchTerm]);
+        }));
+  },[searchTerm])
+
+  React.useEffect(()=>{
+    // setIsLoading(true)
+    handleFetchStories();
+  }, [handleFetchStories]);
 
   const handleSearch = (event) =>{
     setSearchTerm(event.target.value);
