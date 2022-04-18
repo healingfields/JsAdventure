@@ -60,27 +60,26 @@ const App = () => {
   //       2000
   //     )
   //   )
-  const handleFetchStories = React.useCallback(()=>{
-    if(!searchTerm) return;
-
+  const handleFetchStories = React.useCallback(async()=>{
     dispactchStories({
       type: 'STORIES_LOADING'
     });
 
-    axios
-      .get(url)
-      .then(result=>{
-        dispactchStories({
+    try{
+      const result = await axios.get(url);
+
+      dispactchStories({
           type:'STORIES_LOADED',
           payload:result.data.hits,
         })
-      })
-      .catch(()=>{
+    }catch{
           dispactchStories({
           type:'STORIES_FETCH_FAILURE',
         })
-      })
-  }, [url])
+    }
+  }, [url]);
+  
+
 
   React.useEffect(()=>{
     // setIsLoading(true)
