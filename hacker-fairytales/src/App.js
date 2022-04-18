@@ -48,6 +48,9 @@ const App = () => {
   // const [isLoading, setIsLoading] = React.useState(false);
   // const [isError, setIsError] = React.useState(false)
   const [stories, dispactchStories] = React.useReducer(storiesReducer, {data: [], isLoading: false, isError:false});
+  const [url, setUrl] = React.useState(
+    `${API_ENDPOINT}${searchTerm}`
+  )
 
   // const getAsyncStories = () =>
   //   new Promise(resolve =>
@@ -63,7 +66,7 @@ const App = () => {
       type: 'STORIES_LOADING'
     });
 
-    fetch(`${API_ENDPOINT}${searchTerm}`)
+    fetch(url)
       .then(response => response.json())
       .then(result => {
         dispactchStories({
@@ -75,15 +78,19 @@ const App = () => {
         dispactchStories({
           type:'STORIES_FETCH_FAILURE'
         }));
-  },[searchTerm])
+  },[url])
 
   React.useEffect(()=>{
     // setIsLoading(true)
     handleFetchStories();
   }, [handleFetchStories]);
 
-  const handleSearch = (event) =>{
+  const handleSearchInput = (event) =>{
     setSearchTerm(event.target.value);
+  }
+
+  const handleSearchSubmit = () =>{
+    setUrl(`${API_ENDPOINT}${searchTerm}`);
   }
 
 
@@ -98,9 +105,15 @@ const App = () => {
   return(
     <div>
       <h1>My hacker fairytales</h1>
-      <InputWithLabel value={searchTerm} onInputChange={handleSearch} id='search'  type='text' isFocused={false}>
+      <InputWithLabel value={searchTerm} onInputChange={handleSearchInput} id='search'  type='text' isFocused={false}>
        <strong>Search :</strong>
       </InputWithLabel>
+      <button
+        type='button'
+        disabled={!searchTerm}
+        onClick={handleSearchSubmit}>
+          Submit
+        </button>
        {/* <InputWithLabel onInputChange={handleSearch} value={searchTerm} id='search2'  type='text' isFocused>
        <strong>Search2 :</strong>
       </InputWithLabel> */}
