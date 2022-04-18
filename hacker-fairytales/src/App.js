@@ -1,29 +1,5 @@
 import React from 'react'
 
-// const title = "idriss"
-// const welcome = {
-//   greeting : 'Hey',
-//   title : 'idriss',
-// }
-// function getTitle(title){
-//   return title
-// }
-// const nbr = 5
-// const list = [{
-//   title:'react',
-//   url:'https://reactjs.org/',
-//   author:'jordan',
-//   points:4,
-//   objectID:0
-// },
-// {
-//   title:'angular',
-//   url:'https://angular.org/',
-//   author:'cobe',
-//   points:3,
-//   objectID:1
-// }]
-
 const storiesReducer = (state, action) => {
   switch(action.type){
     case 'REMOVE_STORY':
@@ -63,92 +39,51 @@ const useSemiPersistentHook = (key, initialState) => {
 
   return [value, setValue]
 };
+
+const API_ENDPOINT = 'http://hn.algolia.com/api/v1/search?query=';
+
 const App = () => {
-
-   const initialStories = [
-    {title:'React',
-    url:'https://reactjs.org',
-    author:'jordan',
-    points:5,
-    nbr_comments:20,
-    objectID:0
-  },
-    {title:'Vue ',
-    url:'https://Vuejs.org',
-    author:'martin',
-    points:4,
-    nbr_comments:10,
-    objectID:1
-  },
-  {
-    title:'Angular',
-    url:'https://angular.org',
-    author:'omar',
-    points:5,
-    nbr_comments:50,
-    objectID:2
-  },
-  { 
-    title:'Gatsby ',
-    url:'https://gatsby.org',
-    author:'fernando',
-    points:3,
-    nbr_comments:10,
-    objectID:3
-  },
-  { 
-    title:'Laravel',
-    url:'https://laravel.org',
-    author:'joe',
-    points:3,
-    nbr_comments:31,
-    objectID:4
-  },
-  {
-    title:'Vim ',
-    url:'https://vim.org',
-    author:'martin',
-    points:5,
-    nbr_comments:45,
-    objectID:5
-  },
-  ]
-
   const [searchTerm, setSearchTerm] = useSemiPersistentHook('search', 'react')
   // const [stories, setStories] = React.useState([]);
   // const [isLoading, setIsLoading] = React.useState(false);
   // const [isError, setIsError] = React.useState(false)
   const [stories, dispactchStories] = React.useReducer(storiesReducer, {data: [], isLoading: false, isError:false});
 
-  const getAsyncStories = () =>
-    new Promise(resolve => 
-      setTimeout(
-        () => resolve({data: {stories : initialStories}}),
-        2000
-      )
-    )
+  // const getAsyncStories = () =>
+  //   new Promise(resolve =>
+  //     setTimeout(
+  //       () => resolve({data: {stories : initialStories}}),
+  //       2000
+  //     )
+  //   )
 
 
   React.useEffect(()=>{
     // setIsLoading(true)
+    if(!searchTerm) return;
+
     dispactchStories({
       type: 'STORIES_LOADING'
     });
-    getAsyncStories().then(result => {
-      // setStories(result.data.stories);
-      dispactchStories({
-        type: 'STORIES_LOADED',
-        payload: result.data.stories,
+    
+    fetch(`${API_ENDPOINT}${searchTerm}`)
+      .then(response => response.json())
+      .then(result => {
+        dispactchStories({
+          type:'STORIES_LOADED',
+          payload:result.hits,
+        });
       })
-      // setIsLoading(false)
-    }).catch(()=>
-          dispactchStories({type:'STORIES_FETCH_FAILURE'}));
-  }, []);
+      .catch(()=>
+        dispactchStories({
+          type:'STORIES_FETCH_FAILURE'
+        }));}
+ , [searchTerm]);
 
   const handleSearch = (event) =>{
     setSearchTerm(event.target.value);
-      console.log(searchedStories);
   }
+
 
   const handleRemoveStory = item => {
     dispactchStories({
@@ -157,25 +92,20 @@ const App = () => {
     })
   }
 
-  const searchedStories = stories.data.filter(story=>{
-    return story.title
-            .toLowerCase()
-            .includes(searchTerm.toLowerCase())
-  })
 
   return(
     <div>
       <h1>My hacker fairytales</h1>
-      <InputWithLabel onInputChange={handleSearch} value={searchTerm} id='search'  type='text' isFocused={false}>
-       <strong>Search :</strong> 
+      <InputWithLabel value={searchTerm} onInputChange={handleSearch} id='search'  type='text' isFocused={false}>
+       <strong>Search :</strong>
       </InputWithLabel>
        {/* <InputWithLabel onInputChange={handleSearch} value={searchTerm} id='search2'  type='text' isFocused>
-       <strong>Search2 :</strong> 
+       <strong>Search2 :</strong>
       </InputWithLabel> */}
       <hr/>
       {stories.isError && <p>Something went wrong ....</p>}
-      {stories.isLoading ? (<p>Loading....</p>) : (<List list={searchedStories} onRemoveItem={handleRemoveStory} />)}
-       
+      {stories.isLoading ? (<p>Loading....</p>) : (<List list={stories.data} onRemoveItem={handleRemoveStory} />)}
+
     </div>
   );
 }
