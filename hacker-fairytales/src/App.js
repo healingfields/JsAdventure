@@ -1,5 +1,6 @@
 import React from 'react'
 import axios from 'axios';
+import { has } from 'lodash';
 
 const storiesReducer = (state, action) => {
   switch(action.type){
@@ -90,8 +91,9 @@ const App = () => {
     setSearchTerm(event.target.value);
   }
 
-  const handleSearchSubmit = () =>{
+  const handleSearchSubmit = event =>{
     setUrl(`${API_ENDPOINT}${searchTerm}`);
+    event.preventDefault();
   }
 
 
@@ -106,23 +108,36 @@ const App = () => {
   return(
     <div>
       <h1>My hacker fairytales</h1>
-      <InputWithLabel value={searchTerm} onInputChange={handleSearchInput} id='search'  type='text' isFocused={false}>
-       <strong>Search :</strong>
-      </InputWithLabel>
-      <button
-        type='button'
-        disabled={!searchTerm}
-        onClick={handleSearchSubmit}>
-          Submit
-        </button>
+      
        {/* <InputWithLabel onInputChange={handleSearch} value={searchTerm} id='search2'  type='text' isFocused>
        <strong>Search2 :</strong>
       </InputWithLabel> */}
+      <SearchForm 
+        searchTerm={searchTerm}
+        onSearchSubmit={handleSearchSubmit}
+        onSearchInput={handleSearchInput}
+      />
       <hr/>
       {stories.isError && <p>Something went wrong ....</p>}
       {stories.isLoading ? (<p>Loading....</p>) : (<List list={stories.data} onRemoveItem={handleRemoveStory} />)}
 
     </div>
+  );
+}
+
+const SearchForm = ({searchTerm, onSearchSubmit, onSearchInput }) => {
+  return(
+  <form onSubmit={onSearchSubmit}>
+      <InputWithLabel value={searchTerm} onInputChange={onSearchInput} id='search'  type='text' isFocused={false}>
+       <strong>Search :</strong>
+      </InputWithLabel>
+      <button
+        type='submit'
+        disabled={!searchTerm}
+      >
+        Submit
+      </button>
+      </form>
   );
 }
 
