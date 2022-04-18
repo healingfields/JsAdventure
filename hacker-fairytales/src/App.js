@@ -1,7 +1,4 @@
-import { type } from '@testing-library/user-event/dist/type'
-import _, { set } from 'lodash'
 import React from 'react'
-import { isTemplateExpression } from 'typescript'
 
 // const title = "idriss"
 // const welcome = {
@@ -29,12 +26,29 @@ import { isTemplateExpression } from 'typescript'
 
 const storiesReducer = (state, action) => {
   switch(action.type){
-    case 'SET_STORIES':
-      return action.payload;
     case 'REMOVE_STORY':
-      return state.filter(
+      return state.data.filter(
         story => story.objectID !== action.payload.objectID
       );
+    case 'STORIES_LOADING':
+      return {
+        ...state,
+        isLoading:true,
+        isError:false,
+      }
+    case 'STORIES_LOADED':
+      return {
+        ...state,
+        isLoading:false,
+        isError:false,
+        data:action.payload
+      }
+    case 'STORIES_FETCH_FAILURE':
+      return {
+        ...state,
+        isLoading:false,
+        isError:true,
+      };
     default:
       throw new Error();
   }
@@ -102,9 +116,9 @@ const App = () => {
 
   const [searchTerm, setSearchTerm] = useSemiPersistentHook('search', 'react')
   // const [stories, setStories] = React.useState([]);
-  const [isLoading, setIsLoading] = React.useState(false);
-  const [isError, setIsError] = React.useState(false)
-  const [stories, dispactchStories] = React.useReducer(storiesReducer, []);
+  // const [isLoading, setIsLoading] = React.useState(false);
+  // const [isError, setIsError] = React.useState(false)
+  const [stories, dispactchStories] = React.useReducer(storiesReducer, {data: [], isLoading: false, isError:false});
 
   const getAsyncStories = () =>
     new Promise(resolve => 
@@ -116,15 +130,19 @@ const App = () => {
 
 
   React.useEffect(()=>{
-    setIsLoading(true)
+    // setIsLoading(true)
+    dispactchStories({
+      type: 'STORIES_LOADING'
+    });
     getAsyncStories().then(result => {
       // setStories(result.data.stories);
       dispactchStories({
-        type: 'SET_STORIES',
+        type: 'STORIES_LOADED',
         payload: result.data.stories,
       })
-      setIsLoading(false)
-    }).catch(()=>setIsError(true));
+      // setIsLoading(false)
+    }).catch(()=>
+          dispactchStories({type:'STORIES_FETCH_FAILURE'}));
   }, []);
 
   const handleSearch = (event) =>{
@@ -139,7 +157,7 @@ const App = () => {
     })
   }
 
-  const searchedStories = stories.filter(story=>{
+  const searchedStories = stories.data.filter(story=>{
     return story.title
             .toLowerCase()
             .includes(searchTerm.toLowerCase())
@@ -155,8 +173,8 @@ const App = () => {
        <strong>Search2 :</strong> 
       </InputWithLabel> */}
       <hr/>
-      {isError && <p>Something went wrong ....</p>}
-      {isLoading ? (<p>Loading....</p>) : (<List list={searchedStories} onRemoveItem={handleRemoveStory} />)}
+      {stories.isError && <p>Something went wrong ....</p>}
+      {stories.isLoading ? (<p>Loading....</p>) : (<List list={searchedStories} onRemoveItem={handleRemoveStory} />)}
        
     </div>
   );
