@@ -1,6 +1,6 @@
 import React from 'react'
 import axios from 'axios';
-import { has } from 'lodash';
+import './App.css'
 
 const storiesReducer = (state, action) => {
   switch(action.type){
@@ -106,8 +106,8 @@ const App = () => {
 
 
   return(
-    <div>
-      <h1>My hacker fairytales</h1>
+    <div className='container'>
+      <h1 className='headline'>My hacker fairytales</h1>
       
        {/* <InputWithLabel onInputChange={handleSearch} value={searchTerm} id='search2'  type='text' isFocused>
        <strong>Search2 :</strong>
@@ -117,7 +117,7 @@ const App = () => {
         onSearchSubmit={handleSearchSubmit}
         onSearchInput={handleSearchInput}
       />
-      <hr/>
+
       {stories.isError && <p>Something went wrong ....</p>}
       {stories.isLoading ? (<p>Loading....</p>) : (<List list={stories.data} onRemoveItem={handleRemoveStory} />)}
 
@@ -127,13 +127,14 @@ const App = () => {
 
 const SearchForm = ({searchTerm, onSearchSubmit, onSearchInput }) => {
   return(
-  <form onSubmit={onSearchSubmit}>
+  <form onSubmit={onSearchSubmit} className="search_form">
       <InputWithLabel value={searchTerm} onInputChange={onSearchInput} id='search'  type='text' isFocused={false}>
        <strong>Search :</strong>
       </InputWithLabel>
       <button
         type='submit'
         disabled={!searchTerm}
+        className="button button_large"
       >
         Submit
       </button>
@@ -159,9 +160,8 @@ const InputWithLabel = ({id, type, value, onInputChange, isFocused, children}) =
 
   return(
     <>
-      <label htmlFor={id}>{children} :</label>
-      <input type={type} id={id} onChange={onInputChange} value={value} ref={inputRef} />
-      <p>Currently Searching for <strong>{value}</strong></p>
+      <label htmlFor={id} className='label'>{children} :</label>
+      <input type={type} id={id} onChange={onInputChange} value={value} ref={inputRef} className='input'/>
     </>
   );
 }
@@ -180,15 +180,17 @@ const Item = ({item, onRemoveItem}) => {
   // }
 
   return (
-    <div>
-      <a href={item.url}>
-        {item.title}
-      </a>
-      <span>{item.author}</span>
-      <span>{item.nbr_comments}</span>
-      <span>{item.points}</span>
-      <span>
-        <button type='button' onClick={()=>onRemoveItem(item)}>
+    <div className='item'>
+      <span style={{width:'40%'}}>
+        <a href={item.url}>
+          {item.title}
+        </a>
+      </span>
+      <span style={{width:'30%'}}>{item.author}</span>
+      <span style={{width:'10%'}}>{item.num_comments}</span>
+      <span style={{width:'10%'}}>{item.points}</span>
+      <span style={{width:'10%'}}>
+        <button type='button' onClick={()=>onRemoveItem(item)} className="button button_small">
           Remove
         </button>
       </span>
