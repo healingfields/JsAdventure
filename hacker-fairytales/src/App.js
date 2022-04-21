@@ -3,6 +3,8 @@ import axios from "axios";
 import "./App.css";
 import { ReactComponent as Trash } from "./trash.svg";
 
+const API_ENDPOINT = "http://hn.algolia.com/api/v1/search?query=";
+
 const storiesReducer = (state, action) => {
   switch (action.type) {
     case "REMOVE_STORY":
@@ -38,18 +40,26 @@ const storiesReducer = (state, action) => {
 };
 
 const useSemiPersistentHook = (key, initialState) => {
+  const isMounted = React.useRef(false);
   const [value, setValue] = React.useState(
     localStorage.getItem(key) || initialState
   );
 
   React.useEffect(() => {
-    localStorage.setItem(key, value);
+    if (!isMounted.current) {
+      isMounted.current = true;
+    } else {
+      localStorage.setItem(key, value);
+    }
   }, [value, key]);
 
   return [value, setValue];
 };
 
-const API_ENDPOINT = "http://hn.algolia.com/api/v1/search?query=";
+const getSumComments = (stories) => {
+  console.log("C");
+  return stories.data.reduce((result, value) => result + value.num_comments, 0);
+};
 
 const App = () => {
   const [searchTerm, setSearchTerm] = useSemiPersistentHook("search", "react");
@@ -62,6 +72,8 @@ const App = () => {
     isError: false,
   });
   const [url, setUrl] = React.useState(`${API_ENDPOINT}${searchTerm}`);
+
+  const sumComments = React.useMemo(() => getSumComments(stories), [stories]);
 
   // const getAsyncStories = () =>
   //   new Promise(resolve =>
@@ -103,16 +115,18 @@ const App = () => {
     event.preventDefault();
   };
 
-  const handleRemoveStory = (item) => {
+  const handleRemoveStory = React.useCallback((item) => {
     dispactchStories({
       type: "REMOVE_STORY",
       payload: item,
     });
-  };
+  }, []);
 
   return (
     <div className="container">
-      <h1 className="headline">My hacker fairytales</h1>
+      <h1 className="headline">
+        My hacker fairytales with {sumComments} comments
+      </h1>
 
       {/* <InputWithLabel onInputChange={handleSearch} value={searchTerm} id='search2'  type='text' isFocused>
        <strong>Search2 :</strong>
@@ -196,10 +210,12 @@ const InputWithLabel = ({
   );
 };
 
-const List = ({ list, onRemoveItem }) =>
+const List = React.memo(({ list, onRemoveItem }) =>
+  // console.log("list") ||
   list.map((item) => {
     return <Item item={item} key={item.objectID} onRemoveItem={onRemoveItem} />;
-  });
+  })
+);
 
 const Item = ({ item, onRemoveItem }) => {
   // const handleRemoveItem = () => {
@@ -218,7 +234,7 @@ const Item = ({ item, onRemoveItem }) => {
         <button
           type="button"
           onClick={() => onRemoveItem(item)}
-          className="button button_small"
+          className="button button_small remove"
         >
           <Trash height="18px" width="18px" color="black" />
         </button>
@@ -226,4 +242,5 @@ const Item = ({ item, onRemoveItem }) => {
     </div>
   );
 };
+
 export default App;
