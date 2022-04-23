@@ -21,10 +21,17 @@ describe("Item", () => {
     points: 7,
     objectID: 0,
   };
+  const handleRemoveItem = jest.fn();
+
+  let component;
+
+  beforeEach(() => {
+    component = renderer.create(
+      <Item item={item} onRemoveItem={handleRemoveItem} />
+    );
+  });
 
   it("renders all its properties", () => {
-    const component = renderer.create(<Item item={item} />);
-
     expect(component.root.findByType("a").props.href).toEqual(
       "https://reactjs.org/"
     );
@@ -32,5 +39,14 @@ describe("Item", () => {
     expect(
       component.root.findAllByProps({ children: "idriss" }).length
     ).toEqual(1);
+  });
+
+  it("call onRemoveItem on button click", () => {
+    component.root.findByType("button").props.onClick();
+
+    expect(handleRemoveItem).toHaveBeenCalledTimes(1);
+    expect(handleRemoveItem).toHaveBeenCalledWith(item);
+
+    expect(component.root.findAllByType(Item).length).toEqual(1);
   });
 });
