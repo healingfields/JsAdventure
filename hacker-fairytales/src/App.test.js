@@ -50,3 +50,30 @@ describe("Item", () => {
     expect(component.root.findAllByType(Item).length).toEqual(1);
   });
 });
+
+describe("List", () => {
+  const list = [
+    {
+      title: "react",
+      author: "idriss",
+      url: "https://reactjs.org/",
+      num_comments: 4,
+      points: 7,
+      objectID: 0,
+    },
+    {
+      title: "angular",
+      author: "omar",
+      url: "https://angularjs.org/",
+      num_comments: 3,
+      points: 5,
+      objectID: 1,
+    },
+  ];
+
+  it("renders two items", () => {
+    const component = renderer.create(<List list={list} />);
+
+    expect(component.root.findAllByType(Item).length).toEqual(2);
+  });
+});
