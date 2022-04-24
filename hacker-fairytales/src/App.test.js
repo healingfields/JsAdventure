@@ -1,16 +1,10 @@
 import { render, screen } from "@testing-library/react";
-import App from "./App";
-import { SearchForm, List, Item, InputWithLabel } from "./App";
-import renderer from "react-test-renderer";
 
-describe("something to be true", () => {
-  test("true to be true", () => {
-    expect(true).toBe(true);
-  });
-  it("false to be false", () => {
-    expect(false).toBe(false);
-  });
-});
+import { SearchForm, List, Item, InputWithLabel, App } from "./App";
+import renderer from "react-test-renderer";
+import axios from "axios";
+
+jest.mock("axios");
 
 describe("Item", () => {
   const item = {
@@ -77,3 +71,85 @@ describe("List", () => {
     expect(component.root.findAllByType(Item).length).toEqual(2);
   });
 });
+
+describe("SearchForm", () => {
+  const searchFormProps = {
+    searchTerm: "react",
+    onSearchInput: jest.fn(),
+    onSearchSubmit: jest.fn(),
+  };
+
+  let component;
+
+  beforeEach(() => {
+    component = renderer.create(<SearchForm {...searchFormProps} />);
+  });
+
+  it("renders the input with its value", () => {
+    const value = component.root.findByType("input").props.value;
+
+    expect(value).toEqual("react");
+  });
+
+  it("changes the input field", () => {
+    const event = { target: "angular" };
+
+    component.root.findByType("input").props.onChange(event);
+
+    expect(searchFormProps.onSearchInput).toHaveBeenCalledTimes(1);
+    expect(searchFormProps.onSearchInput).toHaveBeenCalledWith(event);
+  });
+
+  it("submits the form", () => {
+    const event = {};
+
+    component.root.findByType("form").props.onSubmit(event);
+
+    expect(searchFormProps.onSearchSubmit).toHaveBeenCalledTimes(1);
+    expect(searchFormProps.onSearchSubmit).toHaveBeenCalledWith(event);
+  });
+
+  it("disables the button and prevents submit", () => {
+    component.update(<SearchForm {...searchFormProps} searchTerm="" />);
+
+    expect(component.root.findByType("button").props.disabled).toBeTruthy();
+  });
+});
+
+// describe("App", () => {
+//   it("succeeds fetching fairytales and passing them to List", () => {
+//     const fairytales = [
+//       {
+//         title: "vuejs",
+//         author: "reda",
+//         url: "https://vuejs.org",
+//         num_comments: 45,
+//         points: 5,
+//         objectID: 0,
+//       },
+//       {
+//         title: "gatsbyjs",
+//         author: "omar",
+//         url: "https://gatsbyjs.org",
+//         num_comments: 54,
+//         points: 3,
+//         objectID: 1,
+//       },
+//     ];
+
+//     const promise = Promise.resolve({
+//       data: {
+//         hits: fairytales,
+//       },
+//     });
+//     axios.get.mockImplementationOnce(() => promise);
+
+//     let component;
+
+//     await renderer.act(async ()=>{
+//       component = renderer.create(<App/>);
+//     });
+
+//     expect(component.root.findByType(List).props.list).toEqual(fairytales);
+//   });
+// });
