@@ -1,7 +1,11 @@
 import { render, screen } from "@testing-library/react";
 
-import { SearchForm, List, Item, InputWithLabel, App } from "./App";
+import App from "./App";
 import renderer from "react-test-renderer";
+import List from "./List.js";
+import Item from "./Item.js";
+import SearchForm from "./SearchForm.js";
+import InputWithLabel from "./InputWithLabel.js";
 import axios from "axios";
 
 jest.mock("axios");
