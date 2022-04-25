@@ -1,12 +1,37 @@
 import React from "react";
 import { ReactComponent as Trash } from "./trash.svg";
 
-const List = React.memo(({ list, onRemoveItem }) =>
+const List = React.memo(({ list, onRemoveItem }) => {
   // console.log("list") ||
-  list.map((item) => {
-    return <Item item={item} key={item.objectID} onRemoveItem={onRemoveItem} />;
-  })
-);
+
+  return (
+    <div>
+      <div
+        style={{ display: "flex", marginBottom: "20px", fontWeight: "bold" }}
+      >
+        <span style={{ width: "40%" }}>
+          <button type="button">TITLE</button>
+        </span>
+        <span style={{ width: "30%" }}>
+          <button type="button">AUTHOR</button>
+        </span>
+        <span style={{ width: "10%" }}>
+          <button type="button">COMMENTS</button>
+        </span>
+        <span style={{ width: "10%" }}>
+          <button type="button">POINTS</button>
+        </span>
+        <span style={{ width: "10%" }}>Actions</span>
+      </div>
+
+      {list.map((item) => {
+        return (
+          <Item item={item} key={item.objectID} onRemoveItem={onRemoveItem} />
+        );
+      })}
+    </div>
+  );
+});
 
 const Item = ({ item, onRemoveItem }) => {
   // const handleRemoveItem = () => {
