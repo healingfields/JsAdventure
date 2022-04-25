@@ -7,6 +7,13 @@ import SearchForm from "./SearchForm.js";
 
 const API_ENDPOINT = "http://hn.algolia.com/api/v1/search?query=";
 
+const extractSearchTerm = (url) => url.replace(API_ENDPOINT, "");
+
+const getLastSearches = (urls) =>
+  urls.slice(-5).map((url) => extractSearchTerm(url));
+
+const getUrl = (searchTerm) => `${API_ENDPOINT}${searchTerm}`;
+
 const storiesReducer = (state, action) => {
   switch (action.type) {
     case "REMOVE_STORY":
@@ -73,9 +80,11 @@ const App = () => {
     isLoading: false,
     isError: false,
   });
-  const [url, setUrl] = React.useState(`${API_ENDPOINT}${searchTerm}`);
+  const [urls, setUrls] = React.useState([getUrl(searchTerm)]);
 
   const sumComments = React.useMemo(() => getSumComments(stories), [stories]);
+
+  const lastSearches = getLastSearches(urls);
 
   // const getAsyncStories = () =>
   //   new Promise(resolve =>
@@ -90,7 +99,7 @@ const App = () => {
     });
 
     try {
-      const result = await axios.get(url);
+      const result = await axios.get(urls[urls.length - 1]);
 
       dispactchStories({
         type: "STORIES_LOADED",
@@ -101,10 +110,11 @@ const App = () => {
         type: "STORIES_FETCH_FAILURE",
       });
     }
-  }, [url]);
+  }, [urls]);
 
   React.useEffect(() => {
     // setIsLoading(true)
+    console.log(urls[urls.length - 1]);
     handleFetchStories();
   }, [handleFetchStories]);
 
@@ -113,7 +123,8 @@ const App = () => {
   };
 
   const handleSearchSubmit = (event) => {
-    setUrl(`${API_ENDPOINT}${searchTerm}`);
+    const url = getUrl(searchTerm);
+    setUrls(urls.concat(url));
     event.preventDefault();
   };
 
@@ -123,6 +134,11 @@ const App = () => {
       payload: item,
     });
   }, []);
+
+  const handleLastSearch = (searchTerm) => {
+    const url = getUrl(searchTerm);
+    setUrls(urls.concat(url));
+  };
 
   return (
     <div className="container">
@@ -138,6 +154,18 @@ const App = () => {
         onSearchSubmit={handleSearchSubmit}
         onSearchInput={handleSearchInput}
       />
+
+      {lastSearches.map((searchTerm, index) => (
+        <button
+          key={searchTerm + index}
+          type="button"
+          className="button"
+          style={{ marginBottom: "15px", marginRight: "5px" }}
+          onClick={() => handleLastSearch(searchTerm)}
+        >
+          {searchTerm}
+        </button>
+      ))}
 
       {stories.isError && <p>Something went wrong ....</p>}
       {stories.isLoading ? (
