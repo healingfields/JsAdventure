@@ -1,42 +1,71 @@
 import React from "react";
 import { ReactComponent as Trash } from "./trash.svg";
+import { sortBy } from "lodash";
 
 const List = React.memo(({ list, onRemoveItem }) => {
   // console.log("list") ||
-  const [sort, setsort] = React.useState("NONE");
+  const [sort, setsort] = React.useState({ sortKey: "NONE", isReverse: false });
+
+  const SORTS = {
+    NONE: (list) => list,
+    TITLE: (list) => sortBy(list, "title"),
+    AUTHOR: (list) => sortBy(list, "author"),
+    COMMENT: (list) => sortBy(list, "num_comments").reverse(),
+    POINT: (list) => sortBy(list, "points").reverse(),
+  };
 
   const handleSort = (sortKey) => {
     setsort(sortKey);
   };
+
+  const sortFunction = SORTS[sort];
+  const sortedList = sortFunction(list);
+
   return (
     <div>
       <div
         style={{ display: "flex", marginBottom: "20px", fontWeight: "bold" }}
       >
         <span style={{ width: "40%" }}>
-          <button type="button" onClick={() => handleSort("TITLE")}>
+          <button
+            type="button"
+            className="button"
+            onClick={() => handleSort("TITLE")}
+          >
             TITLE
           </button>
         </span>
         <span style={{ width: "30%" }}>
-          <button type="button" onClick={() => handleSort("AUTHOR")}>
+          <button
+            type="button"
+            className="button"
+            onClick={() => handleSort("AUTHOR")}
+          >
             AUTHOR
           </button>
         </span>
         <span style={{ width: "10%" }}>
-          <button type="button" onClick={() => handleSort("COMMENT")}>
+          <button
+            type="button"
+            className="button"
+            onClick={() => handleSort("COMMENT")}
+          >
             COMMENTS
           </button>
         </span>
         <span style={{ width: "10%" }}>
-          <button type="button" onClick={() => handleSort("POINT")}>
+          <button
+            type="button"
+            className="button"
+            onClick={() => handleSort("POINT")}
+          >
             POINTS
           </button>
         </span>
         <span style={{ width: "10%" }}>Actions</span>
       </div>
 
-      {list.map((item) => {
+      {sortedList.map((item) => {
         return (
           <Item item={item} key={item.objectID} onRemoveItem={onRemoveItem} />
         );
