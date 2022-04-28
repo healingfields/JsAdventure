@@ -5,9 +5,14 @@ import "./App.css";
 import List from "./List.js";
 import SearchForm from "./SearchForm.js";
 
-const API_ENDPOINT = "http://hn.algolia.com/api/v1/search?query=";
+const API_BASE = "https://hn.algolia.com/api/v1";
+const API_SEARCH = "/search";
+const PARAM_SEARCH = "query=";
 
-const extractSearchTerm = (url) => url.replace(API_ENDPOINT, "");
+const extractSearchTerm = (url) =>
+  url
+    .substring(url.lastIndexOf("?") + 1, url.lastIndexOf("&"))
+    .replace(PARAM_SEARCH, "");
 
 const getLastSearches = (urls) =>
   urls
@@ -26,7 +31,8 @@ const getLastSearches = (urls) =>
     .slice(-6)
     .slice(0, -1);
 
-const getUrl = (searchTerm) => `${API_ENDPOINT}${searchTerm}`;
+const getUrl = (searchTerm) =>
+  `${API_ENDPOINT}${API_SEARCH}${PARAM_SEARCH}${searchTerm}`;
 
 const storiesReducer = (state, action) => {
   switch (action.type) {
@@ -117,7 +123,10 @@ const App = () => {
 
       dispactchStories({
         type: "STORIES_LOADED",
-        payload: result.data.hits,
+        payload: {
+          list: result.data.hits,
+          page: result.data.page,
+        },
       });
     } catch {
       dispactchStories({
