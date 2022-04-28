@@ -171,18 +171,10 @@ const App = () => {
         onSearchSubmit={handleSearchSubmit}
         onSearchInput={handleSearchInput}
       />
-      {lastSearches.map((searchTerm, index) => (
-        <button
-          key={searchTerm + index}
-          type="button"
-          className="button"
-          style={{ marginBottom: "15px", marginRight: "5px" }}
-          onClick={() => handleLastSearch(searchTerm)}
-        >
-          {searchTerm}
-        </button>
-      ))}
-
+      <LastSearches
+        lastSearches={lastSearches}
+        onLastSearch={handleLastSearch}
+      />
       {stories.isError && <p>Something went wrong ....</p>}
       {stories.isLoading ? (
         <p>Loading....</p>
@@ -192,5 +184,19 @@ const App = () => {
     </div>
   );
 };
-
+const LastSearches = ({ lastSearches, onLastSearch }) => (
+  <>
+    {lastSearches.map((searchTerm, index) => (
+      <button
+        key={searchTerm + index}
+        type="button"
+        className="button"
+        style={{ marginBottom: "15px", marginRight: "5px" }}
+        onClick={() => onLastSearch(searchTerm)}
+      >
+        {searchTerm}
+      </button>
+    ))}
+  </>
+);
 export default App;
