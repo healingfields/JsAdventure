@@ -10,7 +10,21 @@ const API_ENDPOINT = "http://hn.algolia.com/api/v1/search?query=";
 const extractSearchTerm = (url) => url.replace(API_ENDPOINT, "");
 
 const getLastSearches = (urls) =>
-  urls.slice(-5).map((url) => extractSearchTerm(url));
+  urls
+    .reduce((result, url, index) => {
+      const searchTerm = extractSearchTerm(url);
+      if (index === 0) {
+        return result.concat(searchTerm);
+      }
+      const previousSearchTerm = result[result.length - 1];
+      if (searchTerm === previousSearchTerm) {
+        return result;
+      } else {
+        return result.concat(searchTerm);
+      }
+    }, [])
+    .slice(-6)
+    .slice(0, -1);
 
 const getUrl = (searchTerm) => `${API_ENDPOINT}${searchTerm}`;
 
@@ -126,6 +140,7 @@ const App = () => {
     const url = getUrl(searchTerm);
     setUrls(urls.concat(url));
     event.preventDefault();
+    console.log("wo");
   };
 
   const handleRemoveStory = React.useCallback((item) => {
@@ -136,6 +151,7 @@ const App = () => {
   }, []);
 
   const handleLastSearch = (searchTerm) => {
+    setSearchTerm(searchTerm);
     const url = getUrl(searchTerm);
     setUrls(urls.concat(url));
   };
@@ -149,12 +165,12 @@ const App = () => {
       {/* <InputWithLabel onInputChange={handleSearch} value={searchTerm} id='search2'  type='text' isFocused>
        <strong>Search2 :</strong>
       </InputWithLabel> */}
+
       <SearchForm
         searchTerm={searchTerm}
         onSearchSubmit={handleSearchSubmit}
         onSearchInput={handleSearchInput}
       />
-
       {lastSearches.map((searchTerm, index) => (
         <button
           key={searchTerm + index}
