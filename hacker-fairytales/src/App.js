@@ -152,7 +152,7 @@ const App = () => {
   };
 
   const handleSearchSubmit = (event) => {
-    const url = getUrl(searchTerm, stories.page);
+    const url = getUrl(searchTerm, 0);
     setUrls(urls.concat(url));
     event.preventDefault();
   };
@@ -166,7 +166,7 @@ const App = () => {
 
   const handleLastSearch = (searchTerm) => {
     setSearchTerm(searchTerm);
-    const url = getUrl(searchTerm, stories.page);
+    const url = getUrl(searchTerm, 0);
     setUrls(urls.concat(url));
   };
 
@@ -177,34 +177,39 @@ const App = () => {
     setUrls(urls.concat(url));
   };
   return (
-    <div className="container">
-      <h1 className="headline">
-        My hacker fairytales with {sumComments} comments
-      </h1>
+    <div className="bg-black text-lime-700">
+      <div className="container mx-auto">
+        <h1 className="text-5xl py-12">
+          My.HackerFairytales
+          {/* with {sumComments} comments */}
+        </h1>
 
-      {/* <InputWithLabel onInputChange={handleSearch} value={searchTerm} id='search2'  type='text' isFocused>
+        {/* <InputWithLabel onInputChange={handleSearch} value={searchTerm} id='search2'  type='text' isFocused>
        <strong>Search2 :</strong>
       </InputWithLabel> */}
+        <div className="flex justify-center ">
+          <SearchForm
+            searchTerm={searchTerm}
+            onSearchSubmit={handleSearchSubmit}
+            onSearchInput={handleSearchInput}
+          />
+        </div>
 
-      <SearchForm
-        searchTerm={searchTerm}
-        onSearchSubmit={handleSearchSubmit}
-        onSearchInput={handleSearchInput}
-      />
-      <LastSearches
-        lastSearches={lastSearches}
-        onLastSearch={handleLastSearch}
-      />
-      <List list={stories.data} onRemoveItem={handleRemoveStory} />
+        <LastSearches
+          lastSearches={lastSearches}
+          onLastSearch={handleLastSearch}
+        />
+        <List list={stories.data} onRemoveItem={handleRemoveStory} />
 
-      {stories.isError && <p>Something went wrong ....</p>}
-      {stories.isLoading ? (
-        <p>Loading....</p>
-      ) : (
-        <button type="button" className="button" onClick={handleMore}>
-          More
-        </button>
-      )}
+        {stories.isError && <p>Something went wrong ....</p>}
+        {stories.isLoading ? (
+          <p>Loading....</p>
+        ) : (
+          <button type="button" onClick={handleMore}>
+            More
+          </button>
+        )}
+      </div>
     </div>
   );
 };
@@ -214,9 +219,8 @@ const LastSearches = ({ lastSearches, onLastSearch }) => (
       <button
         key={searchTerm + index}
         type="button"
-        className="button"
-        style={{ marginBottom: "15px", marginRight: "5px" }}
         onClick={() => onLastSearch(searchTerm)}
+        className="border-4 border-lime-700 mr-4 px-4"
       >
         {searchTerm}
       </button>

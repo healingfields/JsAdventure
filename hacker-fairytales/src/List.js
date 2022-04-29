@@ -26,46 +26,28 @@ const List = React.memo(({ list, onRemoveItem }) => {
 
   return (
     <div>
-      <div
-        style={{ display: "flex", marginBottom: "20px", fontWeight: "bold" }}
-      >
+      <div>
         <span style={{ width: "40%" }}>
-          <button
-            type="button"
-            className="button"
-            onClick={() => handleSort("TITLE")}
-          >
+          <button type="button" onClick={() => handleSort("TITLE")}>
             TITLE
           </button>
         </span>
-        <span style={{ width: "30%" }}>
-          <button
-            type="button"
-            className="button"
-            onClick={() => handleSort("AUTHOR")}
-          >
+        <span>
+          <button type="button" onClick={() => handleSort("AUTHOR")}>
             AUTHOR
           </button>
         </span>
-        <span style={{ width: "10%" }}>
-          <button
-            type="button"
-            className="button"
-            onClick={() => handleSort("COMMENT")}
-          >
+        <span>
+          <button type="button" onClick={() => handleSort("COMMENT")}>
             COMMENTS
           </button>
         </span>
-        <span style={{ width: "10%" }}>
-          <button
-            type="button"
-            className="button"
-            onClick={() => handleSort("POINT")}
-          >
+        <span>
+          <button type="button" onClick={() => handleSort("POINT")}>
             POINTS
           </button>
         </span>
-        <span style={{ width: "10%" }}>Actions</span>
+        <span>Actions</span>
       </div>
 
       {sortedList.map((item) => {
@@ -87,15 +69,11 @@ const Item = ({ item, onRemoveItem }) => {
       <span style={{ width: "40%" }}>
         <a href={item.url}>{item.title}</a>
       </span>
-      <span style={{ width: "30%" }}>{item.author}</span>
-      <span style={{ width: "10%" }}>{item.num_comments}</span>
-      <span style={{ width: "10%" }}>{item.points}</span>
-      <span style={{ width: "10%" }}>
-        <button
-          type="button"
-          onClick={() => onRemoveItem(item)}
-          className="button button_small remove"
-        >
+      <span>{item.author}</span>
+      <span>{item.num_comments}</span>
+      <span>{item.points}</span>
+      <span>
+        <button type="button" onClick={() => onRemoveItem(item)}>
           <Trash height="18px" width="18px" color="black" />
         </button>
       </span>

@@ -26,15 +26,15 @@ const InputWithLabel = ({
   return (
     <>
       <label htmlFor={id} className="label">
-        {children} :
+        {children}
       </label>
       <input
+        className="w-72 h-10 rounded bg-slate-900"
         type={type}
         id={id}
         onChange={onInputChange}
         value={value}
         ref={inputRef}
-        className="input"
       />
     </>
   );
