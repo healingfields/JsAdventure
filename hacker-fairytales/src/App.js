@@ -2,6 +2,8 @@ import React from "react";
 import axios from "axios";
 import "./App.css";
 
+import { ReactComponent as Logo } from "./hacker.svg";
+
 import List from "./List.js";
 import SearchForm from "./SearchForm.js";
 
@@ -179,7 +181,9 @@ const App = () => {
   return (
     <div className="bg-black text-lime-700">
       <div className="container mx-auto">
-        <h1 className="text-5xl py-12">
+        <Logo className="w-10 h-10 fill-lime-700" />
+
+        <h1 className="text-5xl">
           My.HackerFairytales
           {/* with {sumComments} comments */}
         </h1>
@@ -194,11 +198,13 @@ const App = () => {
             onSearchInput={handleSearchInput}
           />
         </div>
+        <div className="mb-10">
+          <LastSearches
+            lastSearches={lastSearches}
+            onLastSearch={handleLastSearch}
+          />
+        </div>
 
-        <LastSearches
-          lastSearches={lastSearches}
-          onLastSearch={handleLastSearch}
-        />
         <List list={stories.data} onRemoveItem={handleRemoveStory} />
 
         {stories.isError && <p>Something went wrong ....</p>}
@@ -220,7 +226,7 @@ const LastSearches = ({ lastSearches, onLastSearch }) => (
         key={searchTerm + index}
         type="button"
         onClick={() => onLastSearch(searchTerm)}
-        className="border-4 border-lime-700 mr-4 px-4"
+        className="border-4 border-lime-700 mr-4 px-4 rounded"
       >
         {searchTerm}
       </button>

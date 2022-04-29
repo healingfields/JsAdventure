@@ -26,8 +26,8 @@ const List = React.memo(({ list, onRemoveItem }) => {
 
   return (
     <div>
-      <div>
-        <span style={{ width: "40%" }}>
+      <div className="grid gap-4 grid-cols-7 text-center mb-6">
+        <span className="col-span-3">
           <button type="button" onClick={() => handleSort("TITLE")}>
             TITLE
           </button>
@@ -65,8 +65,8 @@ const Item = ({ item, onRemoveItem }) => {
   // }
 
   return (
-    <div className="item">
-      <span style={{ width: "40%" }}>
+    <div className="grid gap-4 grid-cols-7 text-center">
+      <span className="col-span-3 text-left">
         <a href={item.url}>{item.title}</a>
       </span>
       <span>{item.author}</span>
@@ -74,7 +74,7 @@ const Item = ({ item, onRemoveItem }) => {
       <span>{item.points}</span>
       <span>
         <button type="button" onClick={() => onRemoveItem(item)}>
-          <Trash height="18px" width="18px" color="black" />
+          <Trash className="text-lime-700" />
         </button>
       </span>
     </div>
